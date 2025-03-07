@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum - {{.Title}}</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="top-header">
+            <div class="container">
+                <div class="logo">
+                    <a href="/">Forum<span>JV</span></a>
+                </div>
+                <div class="user-nav">
+                    <a href="login.html" class="btn-connect">Se connecter</a>
+                    <a href="register.html" class="btn-register">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+        <div class="main-nav">
+            <div class="container">
+                <nav>
+                    <ul>
+                        <li><a href="/">Accueil</a></li>
+                        <li><a href="#" class="active">Forums</a></li>
+                        <li><a href="#">Discussions</a></li>
+                        <li><a href="#">Jeux</a></li>
+                        <li><a href="#">Actualités</a></li>
+                    </ul>
+                </nav>
+                <div class="search-box">
+                    <input type="text" placeholder="Rechercher...">
+                    <button type="submit">🔍</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <div class="breadcrumb">
+            <a href="/">Accueil</a> &gt; <a href="/forums">Forums</a> &gt; <span>{{.Title}}</span>
+        </div>
+        
+        <div class="forum-header">
+            <h1>{{.Title}}</h1>
+            <a href="#" class="btn-new-topic">Nouveau sujet</a>
+        </div>
+
+        <div class="forum-stats">
+            <div class="stat-box">
+                <span class="stat-count">15.3K</span>
+                <span class="stat-label">sujets</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-count">4.2M</span>
+                <span class="stat-label">messages</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-count">7.8K</span>
+                <span class="stat-label">membres actifs</span>
+            </div>
+        </div>
+
+        <div class="forum-tools">
+            <div class="pagination">
+                <span class="page-info">Page 1 sur 432</span>
+                <a href="#" class="page-btn active">1</a>
+                <a href="#" class="page-btn">2</a>
+                <a href="#" class="page-btn">3</a>
+                <span class="page-sep">...</span>
+                <a href="#" class="page-btn">432</a>
+                <a href="#" class="page-next">»</a>
+            </div>
+            <div class="view-options">
+                <select>
+                    <option value="recent">Récents d'abord</option>
+                    <option value="popular">Populaires d'abord</option>
+                    <option value="views">Vues d'abord</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="topic-list">
+            <div class="topic-header">
+                <div class="topic-title">Sujet</div>
+                <div class="topic-author">Auteur</div>
+                <div class="topic-stats">Rép. / Vues</div>
+                <div class="topic-last">Dernier message</div>
+            </div>
+
+            {{range .Topics}}
+            <div class="topic {{if .IsPinned}}pinned{{end}}">
+                <div class="topic-title">
+                    {{if .IsPinned}}<span class="pin-icon">📌</span>{{end}}
+                    <a href="/topic/{{.ID}}">{{.Title}}</a>
+                </div>
+                <div class="topic-author">
+                    <a href="/user/{{.Author}}">{{.Author}}</a>
+                    <span class="topic-date">{{.Date}}</span>
+                </div>
+                <div class="topic-stats">
+                    <span class="replies">{{.Replies}}</span>
+                    <span class="views">{{.Views}}</span>
+                </div>
+                <div class="topic-last">
+                    <a href="/user/{{.LastPoster}}">{{.LastPoster}}</a>
+                    <span class="last-date">Aujourd'hui, {{.LastUpdate}}</span>
+                </div>
+            </div>
+            {{end}}
+        </div>
+
+        <div class="forum-tools bottom">
+            <div class="pagination">
+                <span class="page-info">Page 1 sur 432</span>
+                <a href="#" class="page-btn active">1</a>
+                <a href="#" class="page-btn">2</a>
+                <a href="#" class="page-btn">3</a>
+                <span class="page-sep">...</span>
+                <a href="#" class="page-btn">432</a>
+                <a href="#" class="page-next">»</a>
+            </div>
+            <a href="#" class="btn-new-topic">Nouveau sujet</a>
+        </div>
+    </div>
+
+    <div class="forum-rules">
+        <div class="container">
+            <h3>Règles du forum</h3>
+            <p>En participant à ce forum, vous confirmez avoir lu et accepté les <a href="#">règles générales d'utilisation</a>, 
+               et vous vous engagez à les respecter. La modération se réserve le droit de supprimer tout contenu ne respectant pas ces règles.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-sections">
+                <div class="footer-col">
+                    <h4>Forum</h4>
+                    <ul>
+                        <li><a href="#">Accueil</a></li>
+                        <li><a href="#">Tous les forums</a></li>
+                        <li><a href="#">Discussions</a></li>
+                        <li><a href="#">Membres</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Communauté</h4>
+                    <ul>
+                        <li><a href="#">Règles</a></li>
+                        <li><a href="#">Modération</a></li>
+                        <li><a href="#">Signaler un abus</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="#">Conditions d'utilisation</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="#">Cookies</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Suivez-nous</h4>
+                    <div class="social-links">
+                        <a href="#">Twitter</a>
+                        <a href="#">Facebook</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">Discord</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Forum - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,114 @@
+/* Centrer le formulaire sur la page */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Prend toute la hauteur de la fenêtre */
+    margin: 0;
+    background-color: #121212; /* Ajouter un fond sombre pour contraster */
+}
+
+/* Style du formulaire */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 1.5em; /* Augmenter un peu le padding */
+    background-color: #171717;
+    border-radius: 15px; /* Réduire un peu les bords arrondis */
+    width: 100%;
+    max-width: 400px; /* Fixer une largeur maximale pour garder la forme rectangulaire */
+    transition: .4s ease-in-out;
+}
+
+.form:hover {
+    transform: scale(1.05);
+    border: 1px solid black;
+}
+
+#heading {
+    text-align: center;
+    margin: 1.5em;
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border-radius: 25px;
+    padding: 0.6em;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: #171717;
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+}
+
+.input-icon {
+    height: 1.3em;
+    width: 1.3em;
+    fill: white;
+}
+
+.input-field {
+    background: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: #d3d3d3;
+}
+
+.form .btn {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 2em; /* Ajuster le margin-top */
+}
+
+.button1, .button2 {
+    padding: 0.6em;
+    border-radius: 5px;
+    margin-right: 0.5em;
+    border: none;
+    outline: none;
+    transition: .4s ease-in-out;
+    background-color: #252525;
+    color: white;
+}
+
+.button1 {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+.button2 {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.button1:hover, .button2:hover {
+    background-color: black;
+    color: white;
+}
+
+.button3 {
+    margin-top: 1.5em;
+    margin-bottom: 2.5em;
+    padding: 0.5em;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    transition: .4s ease-in-out;
+    background-color: #252525;
+    color: white;
+}
+
+.button3:hover {
+    background-color: red;
+    color: white;
+}
