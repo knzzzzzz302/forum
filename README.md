@@ -1,6 +1,6 @@
 Bonjour ou bonsoir on vous présente notre Projet FORUM, un projet qui a pour but de construire un site forum avec des fonctionnalité comme la publication de post,likes,etc
 
-V
+
 
     Inscription et connexion classiques
 
@@ -36,7 +36,7 @@ go mod download
 go build -o app main.go
 ./app
 
-En gros après t’ouvres http://localhost:3030/ et c’est bon.
+ t’ouvres http://localhost:3030/ et c’est bon.
 
 HTTPS (optionnel) :
 
