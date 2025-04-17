@@ -1,0 +1,77 @@
+{{ define "LoggedHeader" }}
+<div class="header">
+  <a href="/" class="logo"><i class="fa fa-solid fa-comments"></i>Forum</a>
+  <div class="header-right">
+    <a class="active" href="/">Accueuil</a>
+    <a href="/filter?by=liked">Publications likes</a>
+    <a href="/filter?by=myposts">Mes publications</a>
+    <a href="/newpost">Nouveau post</a>
+    <a href="/api/logout">Se déconnecter</a>
+    <a href="/profile">Profil</a>
+    <a href="/search" class="active">Recherche</a>
+
+
+    <link rel="icon" type="image/png" href="/public/images/image.png">
+<link rel="shortcut icon" type="image/png" href="/public/images/image.png">
+  </div>
+</div>
+{{ end }}
+
+{{ define "DefaultHeader" }}
+<div class="header">
+  <a href="/" class="logo"><i class="fa fa-solid fa-comments"></i>Forum</a>
+  <div class="header-right">
+    <a class="active" href="/">Accueil</a>
+    <a href="/login">Connexion</a>
+    <a href="/register">Inscription</a>
+    <a href="/search" class="active">Recherche</a>
+
+  </div>
+</div>
+{{ end }}
+
+{{ $icon := .Icon }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/public/CSS/style.css"/>
+</head>
+<body>
+  <header>
+    {{ if .User.IsLoggedIn }}
+      {{ template "LoggedHeader" . }}
+    {{ else }}
+      {{ template "DefaultHeader" . }}
+    {{ end }}
+  </header>
+  <div class="container">
+    <div class="navigate">
+      <span><a href="/">Forum</a> >> <a href="">{{ .Title }}</a></span>
+    </div>
+    <div class="posts-table">
+      <div class="table-head">
+
+      </div>
+      {{ range .Posts }}
+      <div class="table-row">
+        <div class="status"><i class="fa {{ $icon }}"></i></div>
+        <div class="subjects">
+          <a href="/post?id={{ .Id }}">{{ .Title }}</a>
+          <br />
+          <span>Créer par <b><a>{{ .Username }}</a></b>.</span>
+        </div>
+        <div class="last-reply">
+          {{ .CreatedAt }}<br />Par <b><a>{{ .Username }}</a></b>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+
+</body>
+</html>

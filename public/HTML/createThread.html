@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Créer une publication - Sekkay</title>
+    <link rel="stylesheet" href="public/CSS/orangeblacktheme.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/" class="logo"><i class="fa fa-solid fa-fire"></i>SEKKAY</a>
+            <div class="header-right">
+                <a class="active" href="/">ACCUEIL</a>
+                <a href="/filter?by=liked">Publications aimées</a>
+                <a href="/filter?by=myposts">Mes publications</a>
+                <a href="/newpost">Nouvelle publication</a>
+                <a href="/api/logout">Déconnexion</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="create-post-container">
+        <form class="post-form" action="/api/createpost" method="post" enctype="multipart/form-data">
+            <h1>CRÉER UNE PUBLICATION</h1>
+            <p>Partagez vos pensées avec la communauté Sekkay</p>
+
+            <div class="form-group">
+                <label for="title">Titre</label>
+                <input 
+                    id="title" 
+                    class="title-input" 
+                    type="text" 
+                    name="title" 
+                    placeholder="Donnez un titre captivant à votre publication"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="content">Contenu</label>
+                <textarea 
+                    id="content" 
+                    class="content-input" 
+                    name="content" 
+                    placeholder="Partagez vos idées, réflexions ou histoire..."
+                    required
+                ></textarea>
+            </div>
+            
+            <div class="image-upload">
+                <div class="image-upload-title">Ajouter des images</div>
+                <div class="image-upload-info">Formats acceptés: JPG, PNG, GIF | Taille max: 10MB | Max 5 images</div>
+                <label for="images" class="file-label">Sélectionner des fichiers</label>
+                <input type="file" id="images" name="images" accept="image/*" multiple class="file-input">
+                <div id="selected-files" class="selected-files"></div>
+            </div>
+
+            <div class="categories-section">
+                <h2>Sélectionnez des catégories</h2>
+                <div class="categories-grid">
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Technologie">
+                        <span>Technologie</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Science">
+                        <span>Science</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Sports">
+                        <span>Sports</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Jeux Vidéo">
+                        <span>Jeux Vidéo</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Musique">
+                        <span>Musique</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Livres">
+                        <span>Livres</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Films">
+                        <span>Cinéma</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Télévision">
+                        <span>Télévision</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Cuisine">
+                        <span>Cuisine</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Voyage">
+                        <span>Voyage</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Photographie">
+                        <span>Photographie</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Art">
+                        <span>Art</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Écriture">
+                        <span>Écriture</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Programmation">
+                        <span>Programmation</span>
+                    </label>
+                    <label class="category-tag">
+                        <input type="checkbox" name="categories[]" value="Autre">
+                        <span>Autre</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">Publier</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('images').addEventListener('change', function() {
+            if (this.files.length > 5) {
+                alert('Vous ne pouvez pas télécharger plus de 5 images.');
+                this.value = '';
+                document.getElementById('selected-files').innerHTML = '';
+                return;
+            }
+            
+            const selectedFilesDiv = document.getElementById('selected-files');
+            selectedFilesDiv.innerHTML = '';
+            
+            for (let i = 0; i < this.files.length; i++) {
+                const fileInfo = document.createElement('div');
+                fileInfo.className = 'selected-file';
+                fileInfo.textContent = this.files[i].name;
+                selectedFilesDiv.appendChild(fileInfo);
+            }
+        });
+    </script>
+</body>
+</html>

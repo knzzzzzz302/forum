@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link rel="stylesheet" href="public/CSS/style.css">
+    <link rel="stylesheet" href="public/CSS/dark-theme.css">
+    <link rel="stylesheet" href="public/CSS/comment-likes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="public/CSS/post-detail.css">
+    
+</head>
+<body>
+    <header>
+        {{if .User.IsLoggedIn}}
+        <div class="header">
+            <a href="/" class="logo"><i class="fa fa-solid fa-user"></i>SEKKAY</a>
+            <div class="header-right">
+                <a class="active" href="/">Accueil</a>
+                <a href="/filter?by=liked">Publications aimées</a>
+                <a href="/filter?by=myposts">Mes publications</a>
+                <a href="/newpost">Nouvelle publication</a>
+                <a href="/api/logout">Déconnexion</a>
+                <a href="/profile">Profil</a> 
+            </div>
+        </div>
+        {{else}}
+        <div class="header">
+            <a href="/" class="logo"><i class="fa fa-solid fa-user"></i>SEKKAY</a>
+            <div class="header-right">
+                <a class="active" href="/">Accueil</a>
+                <a href="/login">Connexion</a>
+                <a href="/register">Inscription</a>
+            </div>
+        </div>
+        {{end}}
+    </header>
+
+    <div class="containerdetail">
+        <div class="subforum-title">
+            <h1>{{.Post.Title}}</h1>
+        </div>
+
+        <div class="body">
+            <div class="authors">
+                <div class="username"><a>{{.Post.Username}}</a></div>
+                <img class="avatar-circle" src="{{if .Post.ProfileImage}}/public/uploads/profiles/{{.Post.ProfileImage}}{{else}}https://cdn-icons-png.flaticon.com/512/149/149071.png{{end}}" alt="Avatar de {{.Post.Username}}">
+            </div>
+            <br>
+            <div class="content">
+                <div class="post-content">
+                    <p>{{.Post.Content}}</p>
+                </div>
+                
+                {{if .Post.Images}}
+                <div class="post-images">
+                    <h3>Images</h3>
+                    <div class="images-gallery">
+                        {{range $index, $image := .Post.Images}}
+                        <div class="image-container">
+                            <img src="{{$image}}" alt="Image {{$index}}" onclick="openModal('{{$image}}')">
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+                {{end}}
+                
+                <br>
+                <hr>
+                
+                <div>
+                    <form action="/api/vote" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="postId" value="{{.Post.Id}}">
+                        <input type="hidden" name="vote" value="1">
+                        <button type="submit">
+                            <img class="thumbsup" src="https://img.icons8.com/material-outlined/24/undefined/thumb-up.png" style="margin: 0"/>
+                        </button>
+                    </form>
+                    <span>{{.Post.UpVotes}}</span>
+
+                    <form action="/api/vote" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="postId" value="{{.Post.Id}}">
+                        <input type="hidden" name="vote" value="-1">
+                        <button type="submit">
+                            <img class="thumbsdown" src="https://img.icons8.com/material-outlined/24/undefined/thumb-up.png" style="margin: 0; transform: rotate(180deg);"/>
+                        </button>
+                    </form>
+                    <span>{{.Post.DownVotes}}</span>
+                </div>
+
+                {{if and .User.IsLoggedIn (eq .User.Username .Post.Username)}}
+                <div style="margin: 20px 0; padding: 15px; background-color: #ff6b00; border-radius: 5px; display: flex; gap: 15px;">
+                    <form action="/api/deletepost" method="post" style="display: inline-block;">
+                        <input type="hidden" name="postId" value="{{.Post.Id}}">
+                        <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                            SUPPRIMER CE POST
+                        </button>
+                    </form>
+                    
+                    <a href="/editpost?postId={{.Post.Id}}" style="display: inline-block;">
+                        <button type="button" style="background-color: #0088ff; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                            ÉDITER CE POST
+                        </button>
+                    </a>
+                </div>
+                {{end}}
+
+                {{if .User.IsLoggedIn}}
+                <div class="comment">
+                    <button onclick="document.getElementById('comment-area').style.display='block'">Commenter</button>
+                </div>
+                {{end}}
+                <br>
+                <p>{{.Post.CreatedAt}}</p>
+            </div>
+        </div>
+        
+        <!--Comment Area-->
+        <div class="comment-area hide" id="comment-area">
+            <form action="/api/comments" method="post">
+                <input name="postId" value="{{.Post.Id}}" type="hidden">
+                <textarea name="content" placeholder="Comment here ..."></textarea>
+                <input type="submit" value="submit">
+            </form>
+        </div>
+        
+        <!--Comments Section-->
+        {{range .Post.Comments}}
+        <div class="comments-container">
+            <div class="body">
+                <div class="authors">
+                    <div class="username"><a>{{.Username}}</a></div>
+                    <img class="avatar-circle" src="{{if .ProfileImage}}/public/uploads/profiles/{{.ProfileImage}}{{else}}https://cdn-icons-png.flaticon.com/512/149/149071.png{{end}}" alt="Avatar de {{.Username}}">
+                </div>
+                <br>
+                <div class="content">
+                    <div class="post-content" id="content-{{.Id}}">
+                        <p>{{.Content}}</p>
+                    </div>
+                    <br>
+                    <hr>
+                    
+                    <div class="comment-like-section">
+                        {{if $.User.IsLoggedIn}}
+                        <form action="/api/commentlike" method="POST">
+                            <input type="hidden" name="commentId" value="{{.Id}}">
+                            <input type="hidden" name="postId" value="{{$.Post.Id}}">
+                            <input type="hidden" name="action" value="like">
+                            <button type="submit" class="comment-like-button {{if .UserLiked}}liked{{end}}">
+                                {{if .UserLiked}}
+                                    <i class="fa fa-heart"></i>
+                                {{else}}
+                                    <i class="fa fa-heart-o"></i>
+                                {{end}}
+                                <span class="like-count">{{.Likes}}</span>
+                            </button>
+                        </form>
+                        
+                        <form action="/api/commentlike" method="POST">
+                            <input type="hidden" name="commentId" value="{{.Id}}">
+                            <input type="hidden" name="postId" value="{{$.Post.Id}}">
+                            <input type="hidden" name="action" value="dislike">
+                            <button type="submit" class="comment-dislike-button {{if .UserDisliked}}disliked{{end}}">
+                                {{if .UserDisliked}}
+                                    <i class="fa fa-thumbs-down"></i>
+                                {{else}}
+                                    <i class="fa fa-thumbs-o-down"></i>
+                                {{end}}
+                                <span class="dislike-count">{{.Dislikes}}</span>
+                            </button>
+                        </form>
+                        {{else}}
+                        <span class="comment-like-count">
+                            <i class="fa fa-heart-o"></i> {{.Likes}}
+                        </span>
+                        <span class="comment-dislike-count">
+                            <i class="fa fa-thumbs-o-down"></i> {{.Dislikes}}
+                        </span>
+                        {{end}}
+                    </div>
+                    
+                    <div class="comment-footer">
+                        <span>{{.CreatedAt}}</span>
+                        
+                        {{if and $.User.IsLoggedIn (eq $.User.Username .Username)}}
+                        <div class="comment-actions">
+                            <button class="edit-btn" onclick="showEditForm({{.Id}})">Éditer</button>
+                            
+                            <form action="/api/deletecomment" method="post">
+                                <input type="hidden" name="commentId" value="{{.Id}}">
+                                <input type="hidden" name="postId" value="{{$.Post.Id}}">
+                                <button type="submit" class="delete-btn">Supprimer</button>
+                            </form>
+                        </div>
+                        {{end}}
+                    </div>
+                    
+                    <div id="edit-form-{{.Id}}" class="edit-form" style="display: none;">
+                        <form action="/api/editcomment" method="post">
+                            <input type="hidden" name="commentId" value="{{.Id}}">
+                            <input type="hidden" name="postId" value="{{$.Post.Id}}">
+                            <textarea name="content">{{.Content}}</textarea>
+                            <div>
+                                <button type="submit">Enregistrer</button>
+                                <button type="button" class="cancel" onclick="hideEditForm({{.Id}})">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <img id="modalImage" class="modal-content">
+    </div>
+    
+    <script>
+        function showEditForm(commentId) {
+            document.getElementById('content-' + commentId).style.display = 'none';
+            document.getElementById('edit-form-' + commentId).style.display = 'block';
+        }
+        
+        function hideEditForm(commentId) {
+            document.getElementById('content-' + commentId).style.display = 'block';
+            document.getElementById('edit-form-' + commentId).style.display = 'none';
+        }
+        
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+        }
+        
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+body {
+    font-family: 'Titillium Web', sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.navigate {
+    background-color: rgba(255,255,255,0.1);
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.navigate a {
+    color: #FF6B00;
+    text-decoration: none;
+}
+
+.posts-table {
+    width: 100%;
+}
+
+.table-head {
+    display: flex;
+    background-color: rgba(255,255,255,0.1);
+    color: #B0B0B0;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+.table-head div {
+    flex: 1;
+}
+
+.table-row {
+    display: flex;
+    background-color: rgba(255,255,255,0.05);
+    margin-bottom: 10px;
+    padding: 15px;
+    align-items: center;
+}
+
+.status {
+    flex: 0 0 50px;
+    color: #FF6B00;
+}
+
+.subjects {
+    flex: 3;
+}
+
+.subjects a {
+    color: white;
+    text-decoration: none;
+}
+
+.subjects a:hover {
+    color: #FF6B00;
+}
+
+.last-reply {
+    flex: 1;
+    text-align: right;
+    color: #B0B0B0;
+}

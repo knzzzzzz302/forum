@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - SEKKAY</title>
+    <link rel="stylesheet" href="public/CSS/style.css">
+    <link rel="stylesheet" href="public/CSS/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <header>
+        <div class="header">
+            <a href="/" class="logo"><i class="fa fa-solid fa-fire"></i>SEKKAY</a>
+            <div class="header-right">
+                <a href="/">Accueil</a>
+                <a href="/filter?by=liked">Publications aimées</a>
+                <a href="/filter?by=myposts">Mes publications</a>
+                <a href="/newpost">Nouvelle publication</a>
+                <a href="/profile" class="active">Profil</a>
+                <a href="/api/logout">Déconnexion</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>Profil Utilisateur</h1>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <img src="{{if .ProfileImage}}/public/uploads/profiles/{{.ProfileImage}}{{else}}https://cdn-icons-png.flaticon.com/512/149/149071.png{{end}}" alt="Avatar" id="profile-preview">
+                    <form action="/api/uploadprofileimage" method="post" enctype="multipart/form-data" class="avatar-upload-form">
+                        <label for="profile_image" class="upload-btn">Changer d'avatar</label>
+                        <input type="file" id="profile_image" name="profile_image" accept="image/*" style="display: none;">
+                        <button type="submit" class="submit-btn" id="upload-btn">Télécharger</button>
+                    </form>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Publications</span>
+                        <span class="stat-value">{{.PostCount}}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Commentaires</span>
+                        <span class="stat-value">{{.CommentCount}}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">J'aime reçus</span>
+                        <span class="stat-value">{{.LikesReceived}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="info-section">
+                    <h2>Informations personnelles</h2>
+                    {{if .Message}}
+                    <div class="alert {{if eq .Message "profile_updated"}}success{{else}}{{if eq .Message "profile_image_updated"}}success{{else}}error{{end}}{{end}}">
+                        {{if eq .Message "profile_updated"}}Profil mis à jour avec succès.{{end}}
+                        {{if eq .Message "profile_image_updated"}}Image de profil mise à jour avec succès.{{end}}
+                        {{if eq .Message "update_failed"}}Échec de la mise à jour du profil.{{end}}
+                        {{if eq .Message "empty_fields"}}Tous les champs sont obligatoires.{{end}}
+                        {{if eq .Message "file_upload_error"}}Erreur lors de l'upload de l'image.{{end}}
+                        {{if eq .Message "file_type_error"}}Type de fichier non autorisé. Utilisez JPG, PNG ou GIF.{{end}}
+                        {{if eq .Message "db_update_error"}}Erreur lors de la mise à jour de l'image dans la base de données.{{end}}
+                    </div>
+                    {{end}}
+                    
+                    <form action="/api/editprofile" method="post" class="profile-form">
+                        <div class="form-group">
+                            <label for="username">Nom d'utilisateur</label>
+                            <input type="text" id="username" name="username" value="{{.Username}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="{{.Email}}" required>
+                        </div>
+                        <button type="submit" class="edit-btn">Mettre à jour</button>
+                    </form>
+                </div>
+
+                <div class="info-section">
+                    <h2>Changer le mot de passe</h2>
+                    {{if .Message}}
+                    <div class="alert {{if eq .Message "password_changed"}}success{{else}}error{{end}}">
+                        {{if eq .Message "password_changed"}}Mot de passe changé avec succès.{{end}}
+                        {{if eq .Message "password_change_failed"}}Échec du changement de mot de passe.{{end}}
+                        {{if eq .Message "passwords_dont_match"}}Les mots de passe ne correspondent pas.{{end}}
+                        {{if eq .Message "empty_password_fields"}}Tous les champs de mot de passe sont obligatoires.{{end}}
+                    </div>
+                    {{end}}
+                    
+                    <form action="/api/changepassword" method="post" class="password-form">
+                        <div class="form-group">
+                            <label for="current_password">Mot de passe actuel</label>
+                            <input type="password" id="current_password" name="current_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">Nouveau mot de passe</label>
+                            <input type="password" id="new_password" name="new_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirmer le mot de passe</label>
+                            <input type="password" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <button type="submit" class="edit-btn">Changer le mot de passe</button>
+                    </form>
+                </div>
+
+<div class="info-section">
+    <h2>Sécurité du compte</h2>
+    
+    {{if .MFAEnabled}}
+    <div style="background-color: rgba(0, 255, 0, 0.1); border: 1px solid #00cc00; border-radius: 5px; padding: 15px; margin-bottom: 15px;">
+        <p><i class="fa fa-shield"></i> <strong>L'authentification à deux facteurs est activée</strong> sur votre compte.</p>
+        <p>Cette protection supplémentaire renforce la sécurité de votre compte.</p>
+    </div>
+    {{else}}
+    <div style="background-color: rgba(255, 107, 0, 0.1); border: 1px solid #FF6B00; border-radius: 5px; padding: 15px; margin-bottom: 15px;">
+        <p><i class="fa fa-exclamation-triangle"></i> <strong>L'authentification à deux facteurs n'est pas activée</strong> sur votre compte.</p>
+        <p>Nous vous recommandons de l'activer pour renforcer la sécurité de votre compte.</p>
+    </div>
+    {{end}}
+    
+    <a href="/mfa/setup" class="edit-btn">
+        {{if .MFAEnabled}}
+        Gérer l'authentification à deux facteurs
+        {{else}}
+        Activer l'authentification à deux facteurs
+        {{end}}
+    </a>
+</div>
+
+
+
+
+
+
+                <div class="info-section">
+                    <h2>Activité récente</h2>
+                    <div class="activity-list">
+                        {{if .RecentPosts}}
+                            {{range .RecentPosts}}
+                            <div class="activity-item">
+                                <a href="/post?id={{.Id}}">{{.Title}}</a>
+                                <span class="activity-date">{{.CreatedAt}}</span>
+                            </div>
+                            {{end}}
+                        {{else}}
+                            <p>Aucune activité récente.</p>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputElement = document.getElementById('profile_image');
+            const uploadButton = document.getElementById('upload-btn');
+            const previewImage = document.getElementById('profile-preview');
+            
+            uploadButton.style.display = 'none';
+            
+            inputElement.addEventListener('change', function(e) {
+                const file = this.files[0];
+                
+                if (file) {
+                    uploadButton.style.display = 'block';
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    uploadButton.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
