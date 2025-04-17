@@ -71,11 +71,12 @@ Tech utilisées
 
 Note
 
-C’est un projet étudiant fait à Ynov Montpellier par Kenzi (Sekkay) et Anas (GLM).
-Stack Overflow
-gcloud auth login with Docker does not work as it says in documenta...
-I've followed the Docker instructions from here exactly: https://cloud.google.com/sdk/#install-docker (click Alternative Methods to find Docker instructions).
+C’est un projet étudiant fait à Ynov Montpellier par Kenzi BENDJELLOUL et Anas CHAKIR et UGO DELATTRE 
 
-But when I run:
 
-docker run -t -i --
+
+
+
+
+
+
